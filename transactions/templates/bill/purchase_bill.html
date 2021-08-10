@@ -1,0 +1,155 @@
+{% extends bill_base %} {% load static %} {% block title %} Purchases Bill No : {{ bill.billno }}{% endblock title %} {% block content %}
+
+<div style="color:#ea2088; font-style: bold; font-size: 3rem;  border-bottom: 1px solid white;">Purchase Bill No : {{ bill.billno }}</div>
+
+<br><br>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="bg">
+
+        <br><br>
+
+        <div id="printArea" class="bg">
+
+            <table class="outer-box inner-box" style="width: 800px; margin-left: auto; margin-right: auto;">
+                <tbody>
+
+                    <tr style="height: 1px;">
+                        <td>
+                            <p style="text-align: center;">TAX INVOICE - PURCHASE</p>
+                        </td>
+                    </tr>
+
+                    <tr style="text-align: center;">
+                        <td>
+                            
+                            <img src={% static "Capture.PNG" %}> <br>
+                            <!-- <span style="font-size: 120%; font-weight: bold; text-decoration: underline;">DEALERS IN : Products</span> <br> -->
+                            203, Ganpati heights, Mata Road,
+                            near bus stand workshop<br>Gurgaon, Haryana (HR - 06), PIN
+                            Code 122001, India
+                            <br>
+                            www.alisanmart.com <br>
+                            support@alisan.co.in <br>
+                            <span style=" font-weight: bold;">GSTIN NO - 06ABUFA6605Q1ZQ</span> <br>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table class="outer-box" style="width: 800px; margin-left: auto; margin-right: auto;">
+                                <tbody>
+
+                                    <tr>
+                                        <td class="inner-box" style="width: 50%; font-weight: bold;">&nbsp; SHIP TO:</td>
+                                        <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp; INVOICE NO</td>
+                                        <td class="inner-box" style="width: 25%;">&nbsp;{{ bill.billno }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-box" style="width: 50%;">&nbsp;{{ bill.supplier.name }}</td>
+                                        <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp;DATE</td>
+                                        <td class="inner-box" style="width: 25%;">&nbsp;{{ bill.time.date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-box" style="width: 50%;" rowspan="3">{{ bill.supplier.address|linebreaks }}</td>
+                                        <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp;EWAY NO</td>
+                                        <td class="inner-box align-middle" style="width: 25%;"> <input type="text" name="eway" class="align-middle" style="border: 0; overflow: hidden;" value="{% if billdetails.eway %}{{ billdetails.eway }}{% endif %}"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp;VEHICLE NO</td>
+                                        <td class="inner-box align-middle" style="width: 25%;"> <input type="text" name="veh" class="align-middle" style="border: 0; overflow: hidden;" value="{% if billdetails.veh %}{{ billdetails.veh }}{% endif %}"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-box" style="width: 25%; font-weight: bold;">&nbsp;DESTINATION</td>
+                                        <td class="inner-box align-middle" style="width: 25%;"> <input type="text" name="destination" class="align-middle" style="border: 0; overflow: hidden;" value="{% if billdetails.destination %}{{ billdetails.destination }}{% endif %}"> </td>
+                                    </tr>
+                                    <tr>
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table class="outer-box" style="width: auto; margin-left: auto; margin-right: auto;">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-box" style="width: 5%; font-weight: bold; text-align: center;">&nbsp;SNO</td>
+                                        <td class="inner-box" style="width: 30%; font-weight: bold; text-align: center;">PRODUCT / SERVICE NAME</td>
+                                        <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">&nbsp;HSN/SAC</td>
+                                        <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">QTY</td>
+                                        <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">UNIT PRICE</td>
+                                        <td class="inner-box" style="width: 12%; font-weight: bold; text-align: center;">AMOUNT</td>
+                                    </tr>
+                                    {% for item in items %}
+                                    <tr style="height: auto;">
+                                        <td class="inner-box" style="width: 5%;">&nbsp; {{ forloop.counter }}</td>
+                                        <td class="inner-box" style="width: 30%;">&nbsp; Alisan {{ item.stock.name }}</td>
+                                        <td class="inner-box" style="width: 12%;">&nbsp;</td>
+                                        <td class="inner-box" style="width: 12%;">&nbsp; {{ item.quantity }}</td>
+                                        <td class="inner-box" style="width: 12%;">&nbsp; {{ item.perprice }}</td>
+                                        <td class="inner-box" style="width: 12%;">&nbsp;{{ item.totalprice }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table class="outer-box inner-box" style="width: 800px; margin-left: auto; margin-right: auto;">
+                                <tbody>
+                                   
+                            <tr>
+                                <td class="inner-box" style="font-weight: bold;">&nbsp;TOTAL</td>
+                                <td class="inner-box align-middle">&nbsp; <input type="text" name="total" class="align-middle"
+                                        style="border: 0; overflow: hidden;" value="{% if billdetails.total %}{{ billdetails.total }}{% endif %}">
+                                </td>
+                            </tr>
+                    </tbody>
+                    </table>
+                    </td>
+                    </tr>
+
+                    <td style="text-align: right;">
+                        <span style="font-weight: bold;">AUTHORIZED SIGNATORY <br> <br> <img src={% static "sign.PNG" %}> <br> </span> <br>
+                    
+                        Note : All products include 1 year Replaceable Warranty.
+                    
+                    
+                    </td>
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <br><br>
+
+    </div>
+
+    <br><br>
+
+    <div class="wrapper">
+        <button class="center ghost-blue" onclick="printpage('printArea')">Print</button>
+        <button class="center ghost-green" type="submit">Save Draft</button>
+        <a href="{% url 'purchases-list' %}" class=" btn center ghost-button">Go Back</a>
+    </div>
+
+</form>
+
+<script>
+    function printpage(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>
+
+{% endblock %}
